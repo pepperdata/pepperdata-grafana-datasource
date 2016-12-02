@@ -1,0 +1,79 @@
+<query-editor-row query-ctrl="ctrl" class="generic-datasource-query-row" has-text-edit-mode="true">
+  <div class="gf-form" ng-if="ctrl.target.rawQuery">
+    <textarea class="gf-form-input" rows="5"
+              ng-model="ctrl.target.rawDashboardQuery"
+              spellcheck="false"
+              ng-blur="ctrl.onRawChangeInternal()" />
+  </div>
+  <div class="gf-form-inline" ng-if="!ctrl.target.rawQuery">
+    <div class="gf-form">
+      <label class="gf-form-label query-keyword width-8">Metric<info-popover mode="right-normal">
+      Metric urlname. Example: tasks, rssram.
+    </info-popover></label>
+    </div>
+    <div>
+      <div class="gf-form">
+        <!--<metric-segment-model property="ctrl.target.metricUrlName" get-options="ctrl.getOptions()" on-change="ctrl.onChangeInternal()"-->
+                              <!--css-class="tight-form-item-xxlarge"></metric-segment-model>-->
+        <input type="text"
+               class="gf-form-input" spellcheck='false'
+               ng-model="ctrl.target.metricUrlName"
+               ng-blur="ctrl.onChangeInternal()">
+        </input>
+      </div>
+    </div>
+  </div>
+  <div class="gf-form" ng-if="!ctrl.target.rawQuery">
+    <div class="gf-form-inline">
+      <div class="gf-form">
+        <label class="gf-form-label query-keyword width-8">
+          Tags <info-popover mode="right-normal">
+          Example tag values are; h: host, j: job, u: user. Value can be '*' for all or a
+          specific value.
+        </info-popover>
+        </label>
+      </div>
+
+      <div class="gf-form" ng-repeat="(key, value) in ctrl.target.tags track by $index" class="gf-form">
+        <label class="gf-form-label">
+          {{key}}&nbsp;=&nbsp;{{value}}
+          <a ng-click="ctrl.editTag(key, value)">
+            <i class="fa fa-pencil"></i>
+          </a>
+          <a ng-click="ctrl.removeTag(key)">
+            <i class="fa fa-remove"></i>
+          </a>
+        </label>
+      </div>
+
+      <div class="gf-form" ng-hide="ctrl.addTagMode">
+        <label class="gf-form-label query-keyword">
+          <a ng-click="ctrl.addTag()"><i class="fa fa-plus"></i></a>
+        </label>
+      </div>
+
+      <div class="gf-form" ng-show="ctrl.addTagMode">
+        <input type="text"
+               class="gf-form-input" spellcheck='false'
+               bs-typeahead="ctrl.suggestTagKeys" data-min-length=0 data-items=100
+               ng-model="ctrl.target.currentTagKey" placeholder="key">
+        </input>
+
+        <input type="text" class="gf-form-input"
+               spellcheck='false' bs-typeahead="ctrl.suggestTagValues"
+               data-min-length=0 data-items=100 ng-model="ctrl.target.currentTagValue" placeholder="value">
+        </input>
+
+        <label class="gf-form-label" ng-show="ctrl.errors.tags">
+          <a bs-tooltip="ctrl.errors.tags" style="color: rgb(229, 189, 28)" >
+            <i class="fa fa-warning"></i>
+          </a>
+        </label>
+        <label class="gf-form-label" >
+          <a ng-click="ctrl.addTag()" ng-hide="ctrl.errors.tags">add tag</a>
+          <a ng-click="ctrl.closeAddTagMode()"><i class="fa fa-remove"></i></a>
+        </label>
+      </div>
+    </div>
+  </div>
+</query-editor-row>
