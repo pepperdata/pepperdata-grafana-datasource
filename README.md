@@ -6,7 +6,7 @@ A work in progress plugin for using Pepperdata as a datasource. Currently only t
 
 ###Install
 
-Put the /dist directory in your plugins folder
+Put the /dist directory in your grafana plugins folder
 
 
 ###Configure
