@@ -1,4 +1,12 @@
 <query-editor-row query-ctrl="ctrl" class="generic-datasource-query-row" has-text-edit-mode="true">
+  <div class="gf-form">
+    <label class="gf-form-label query-keyword width-8">Cluster<info-popover mode="right-normal">
+      The name of the cluster in the url
+    </info-popover></label>
+    <input type="text" class="gf-form-input" spellcheck="false"
+           ng-model="ctrl.target.cluster"
+           ng-blur="ctrl.onChangeInternal()">
+  </div>
   <div class="gf-form" ng-if="ctrl.target.rawQuery">
     <textarea class="gf-form-input" rows="5"
               ng-model="ctrl.target.rawDashboardQuery"

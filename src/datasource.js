@@ -30,7 +30,8 @@ export class GenericDatasource {
         qs[key] = templateReplace(value)
       });
 
-      const url = this.url + '/m?' + Utils.param(dashboardQuery)
+      const url = this.url.replace(/\/$/, "") + "/" + target.cluster +'/api/m?'
+          + Utils.param(dashboardQuery)
           + "&" + Utils.param(qs);
       return this.backendSrv.datasourceRequest({
         url,
@@ -66,7 +67,7 @@ export class GenericDatasource {
 
   testDatasource() {
     return this.backendSrv.datasourceRequest({
-      url: this.url + '/m?m=tasks&sample=60000',
+      url: this.url + '/favicon.ico',
       method: 'GET'
     }).then(response => {
       if (response.status === 200) {

@@ -10,16 +10,18 @@ describe('GenericDatasource', function () {
       to: {format: () => 'to'}
     },
     maxDataPoints: 1024,
-    targets: [{rawDashboardQuery:'m=tasks'}]
+    targets: [{rawDashboardQuery:'m=tasks', cluster:"mycluster"}]
   };
   beforeEach(function () {
+    ctx.instanceSettings = {};
+    ctx.instanceSettings.url = "http://localhost:3000/";
     ctx.$q = Q;
     ctx.backendSrv = {};
     ctx.templateSrv = {};
     ctx.templateSrv.replace = function (data) {
       return data;
     };
-    ctx.ds = new Datasource({}, ctx.$q, ctx.backendSrv, ctx.templateSrv);
+    ctx.ds = new Datasource(ctx.instanceSettings, ctx.$q, ctx.backendSrv, ctx.templateSrv);
   });
 
   it('should return an empty array when no targets are set', function (done) {

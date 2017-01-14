@@ -76,7 +76,8 @@ System.register(['lodash', './utils', 'moment'], function (_export, _context) {
                 qs[key] = templateReplace(value);
               });
 
-              var url = _this.url + '/m?' + Utils.param(dashboardQuery) + "&" + Utils.param(qs);
+              console.log(_this);
+              var url = _this.url.replace(/\/$/, "") + "/" + target.cluster + '/api/m?' + Utils.param(dashboardQuery) + "&" + Utils.param(qs);
               return _this.backendSrv.datasourceRequest({
                 url: url,
                 method: 'GET',
@@ -112,7 +113,7 @@ System.register(['lodash', './utils', 'moment'], function (_export, _context) {
           key: 'testDatasource',
           value: function testDatasource() {
             return this.backendSrv.datasourceRequest({
-              url: this.url + '/m?m=tasks&sample=60000',
+              url: this.url + '/favicon.ico',
               method: 'GET'
             }).then(function (response) {
               if (response.status === 200) {
