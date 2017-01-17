@@ -24,6 +24,11 @@ describe('GenericDatasource', function () {
     ctx.ds = new Datasource(ctx.instanceSettings, ctx.$q, ctx.backendSrv, ctx.templateSrv);
   });
 
+  it('should build a url', function() {
+    const url = ctx.ds.buildUrl("clustername", "/my/query?", "a=b");
+    expect(url).to.equal("http://localhost:3000/clustername/my/query?a=b")
+  });
+
   it('should return an empty array when no targets are set', function (done) {
     ctx.ds.query(_.extend({}, queryData, {targets: []})).then(function (result) {
       expect(result.data).to.have.length(0);

@@ -76,8 +76,7 @@ System.register(['lodash', './utils', 'moment'], function (_export, _context) {
                 qs[key] = templateReplace(value);
               });
 
-              console.log(_this);
-              var url = _this.url.replace(/\/$/, "") + "/" + target.cluster + '/api/m?' + Utils.param(dashboardQuery) + "&" + Utils.param(qs);
+              var url = _this.buildUrl(target.cluster, '/api/m?', Utils.param(dashboardQuery) + "&" + Utils.param(qs));
               return _this.backendSrv.datasourceRequest({
                 url: url,
                 method: 'GET',
@@ -96,6 +95,11 @@ System.register(['lodash', './utils', 'moment'], function (_export, _context) {
                 }).flatten().value()
               };
             });
+          }
+        }, {
+          key: 'buildUrl',
+          value: function buildUrl(clusterName, dashboardQuery, queryString) {
+            return this.url.replace(/\/$/, "") + "/" + clusterName + '/' + dashboardQuery.replace(/(^\/|\?$)/g, '') + '?' + queryString;
           }
         }, {
           key: 'transformPDResult',

@@ -30,9 +30,8 @@ export class GenericDatasource {
         qs[key] = templateReplace(value)
       });
 
-      const url = this.url.replace(/\/$/, "") + "/" + target.cluster +'/api/m?'
-          + Utils.param(dashboardQuery)
-          + "&" + Utils.param(qs);
+      const url = this.buildUrl(target.cluster, '/api/m?',
+          Utils.param(dashboardQuery) + "&" + Utils.param(qs));
       return this.backendSrv.datasourceRequest({
         url,
         method: 'GET',
@@ -51,7 +50,11 @@ export class GenericDatasource {
         }).flatten().value()
       };
     });
+  }
 
+  buildUrl(clusterName, dashboardQuery, queryString) {
+    return this.url.replace(/\/$/, "")
+        + "/" + clusterName + '/' + dashboardQuery.replace(/(^\/|\?$)/g, '') + '?' + queryString;
   }
 
   transformPDResult(response) {
