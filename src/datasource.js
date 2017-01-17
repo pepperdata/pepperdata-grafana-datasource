@@ -16,8 +16,8 @@ export class GenericDatasource {
 
   query(options) {
     const templateReplace = query => this.templateSrv.replace(query, null, 'regex');
-    const rangeMs = moment(options.range.from).subtract(options.range.to).valueOf();
-    const sample = Math.round(rangeMs / options.maxDataPoints / 1000);
+    const rangeMs = options.range.to.valueOf() - options.range.from.valueOf();
+    const sample = Math.max(10000, Math.round(rangeMs / options.maxDataPoints));
     const dashboardQuery = _.assign({
       s: templateReplace(options.range.from.format(PEPPERDATA_DATE_FORMAT)),
       e: templateReplace(options.range.to.format(PEPPERDATA_DATE_FORMAT)),
@@ -45,8 +45,8 @@ export class GenericDatasource {
 
     return this.q.all(promises).then((responses) => {
       return {
-        data: _(responses).map((response)=> {
-          return this.transformPDResult(response);
+        data: _(responses).map((response, i)=> {
+          return this.transformPDResult(response, options.targets[i].alias);
         }).flatten().value()
       };
     });
@@ -57,8 +57,8 @@ export class GenericDatasource {
         + "/" + clusterName + '/' + dashboardQuery.replace(/(^\/|\?$)/g, '') + '?' + queryString;
   }
 
-  transformPDResult(response) {
-    return _.map(response.data.data.allSeries, (series) => {
+  transformPDResult(response, alias) {
+    const transformedSeries = _.map(response.data.data.allSeries, (series) => {
       return {
         target: series.seriesId,
         datapoints: _.map(series.dataPoints, function (point) {
@@ -66,6 +66,14 @@ export class GenericDatasource {
         })
       };
     });
+
+    if (alias) {
+      const isSingleSeries = transformedSeries.length === 1;
+      _.forEach(transformedSeries, function (series) {
+        series.target = alias + (isSingleSeries ? "" : " " + series.target);
+      });
+    }
+    return transformedSeries;
   }
 
   testDatasource() {

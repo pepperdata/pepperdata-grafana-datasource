@@ -60,8 +60,8 @@ System.register(['lodash', './utils', 'moment'], function (_export, _context) {
             var templateReplace = function templateReplace(query) {
               return _this.templateSrv.replace(query, null, 'regex');
             };
-            var rangeMs = moment(options.range.from).subtract(options.range.to).valueOf();
-            var sample = Math.round(rangeMs / options.maxDataPoints / 1000);
+            var rangeMs = options.range.to.valueOf() - options.range.from.valueOf();
+            var sample = Math.max(10000, Math.round(rangeMs / options.maxDataPoints));
             var dashboardQuery = _.assign({
               s: templateReplace(options.range.from.format(PEPPERDATA_DATE_FORMAT)),
               e: templateReplace(options.range.to.format(PEPPERDATA_DATE_FORMAT)),
@@ -90,8 +90,8 @@ System.register(['lodash', './utils', 'moment'], function (_export, _context) {
 
             return this.q.all(promises).then(function (responses) {
               return {
-                data: _(responses).map(function (response) {
-                  return _this.transformPDResult(response);
+                data: _(responses).map(function (response, i) {
+                  return _this.transformPDResult(response, options.targets[i].alias);
                 }).flatten().value()
               };
             });
@@ -103,8 +103,8 @@ System.register(['lodash', './utils', 'moment'], function (_export, _context) {
           }
         }, {
           key: 'transformPDResult',
-          value: function transformPDResult(response) {
-            return _.map(response.data.data.allSeries, function (series) {
+          value: function transformPDResult(response, alias) {
+            var transformedSeries = _.map(response.data.data.allSeries, function (series) {
               return {
                 target: series.seriesId,
                 datapoints: _.map(series.dataPoints, function (point) {
@@ -112,6 +112,16 @@ System.register(['lodash', './utils', 'moment'], function (_export, _context) {
                 })
               };
             });
+
+            if (alias) {
+              (function () {
+                var isSingleSeries = transformedSeries.length === 1;
+                _.forEach(transformedSeries, function (series) {
+                  series.target = alias + (isSingleSeries ? "" : " " + series.target);
+                });
+              })();
+            }
+            return transformedSeries;
           }
         }, {
           key: 'testDatasource',
