@@ -28,6 +28,7 @@ const tagKeyLookup = {
 };
 
 const tagUrlKeyLookup = _.invert(tagKeyLookup);
+const DEFAULT_DOWNSAMPLER = "default(fastest)";
 
 export class GenericDatasourceQueryCtrl extends QueryCtrl {
 
@@ -96,6 +97,9 @@ export class GenericDatasourceQueryCtrl extends QueryCtrl {
       return k
     }));
   };
+  suggestDownsamplerValues(query, callback) {
+    callback([DEFAULT_DOWNSAMPLER, "average", "sum", "maximum", "minimum", "area"]);
+  }
 
   targetBlur() {
     //this.errors = this.validateTarget();
@@ -107,6 +111,9 @@ export class GenericDatasourceQueryCtrl extends QueryCtrl {
     const dashboardQuery = _.assign({
       m: this.target.metricUrlName
     }, this.buildTagQueryObject());
+    if (this.target.downsampler && this.target.downsampler !== DEFAULT_DOWNSAMPLER) {
+      dashboardQuery.downsampler = this.target.downsampler;
+    }
     return Utils.param(dashboardQuery);
   }
 

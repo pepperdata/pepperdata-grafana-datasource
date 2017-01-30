@@ -1,6 +1,6 @@
 <query-editor-row query-ctrl="ctrl" class="generic-datasource-query-row" has-text-edit-mode="true">
   <div class="gf-form-inline">
-    <label class="gf-form-label query-keyword width-8">Cluster<info-popover mode="right-normal">
+    <label class="gf-form-label query-keyword width-12">Cluster<info-popover mode="right-normal">
       The name of the cluster in the url
     </info-popover></label>
     <div class="gf-form">
@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="gf-form-inline">
-    <label class="gf-form-label width-8">Alias<info-popover mode="right-normal">
+    <label class="gf-form-label width-12">Alias<info-popover mode="right-normal">
       Optional name to give this series
     </info-popover></label>
     <div class="gf-form">
@@ -27,8 +27,10 @@
   </div>
   <div class="gf-form-inline" ng-if="!ctrl.target.rawQuery">
     <div class="gf-form">
-      <label class="gf-form-label query-keyword width-8">Metric<info-popover mode="right-normal">
-      Metric urlname. Example: tasks, rssram.
+      <label class="gf-form-label query-keyword width-12">Metric<info-popover mode="right-normal">
+      Metric urlname. Example: tasks, rssram. Simple operations can be performed on metrics using
+        RPN notation. For example if you wanted to divide the ram per task you would do:
+        expr(rssram tasks /)
     </info-popover></label>
     </div>
     <div>
@@ -46,14 +48,13 @@
   <div class="gf-form" ng-if="!ctrl.target.rawQuery">
     <div class="gf-form-inline">
       <div class="gf-form">
-        <label class="gf-form-label query-keyword width-8">
+        <label class="gf-form-label query-keyword width-12">
           Tags <info-popover mode="right-normal">
           Example tag values are; h: host, j: job, u: user. Value can be '*' for all or a
           specific value.
         </info-popover>
         </label>
       </div>
-
       <div class="gf-form" ng-repeat="(key, value) in ctrl.target.tags track by $index" class="gf-form">
         <label class="gf-form-label">
           {{key}}&nbsp;=&nbsp;{{value}}
@@ -94,6 +95,20 @@
           <a ng-click="ctrl.closeAddTagMode()"><i class="fa fa-remove"></i></a>
         </label>
       </div>
+    </div>
+  </div>
+  <div class="gf-form-inline"  ng-if="!ctrl.target.rawQuery">
+    <label class="gf-form-label width-12">Downsample
+      <info-popover mode="right-normal">
+        Downsampler to use
+      </info-popover>
+    </label>
+    <div class="gf-form">
+      <input type="text"
+             class="gf-form-input" spellcheck='false'
+             bs-typeahead="ctrl.suggestDownsamplerValues" data-min-length=0 data-items=100
+             ng-model="ctrl.target.downsampler" placeholder="" ng-blur="ctrl.onChangeInternal()">
+      </input>
     </div>
   </div>
 </query-editor-row>

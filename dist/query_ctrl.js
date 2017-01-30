@@ -3,7 +3,7 @@
 System.register(['app/plugins/sdk', './css/query-editor.css!', './utils', 'lodash'], function (_export, _context) {
   "use strict";
 
-  var QueryCtrl, Utils, _, _createClass, tagKeyLookup, tagUrlKeyLookup, GenericDatasourceQueryCtrl;
+  var QueryCtrl, Utils, _, _createClass, tagKeyLookup, tagUrlKeyLookup, DEFAULT_DOWNSAMPLER, GenericDatasourceQueryCtrl;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -86,6 +86,7 @@ System.register(['app/plugins/sdk', './css/query-editor.css!', './utils', 'lodas
         "namespace": "namespace"
       };
       tagUrlKeyLookup = _.invert(tagKeyLookup);
+      DEFAULT_DOWNSAMPLER = "default(fastest)";
 
       _export('GenericDatasourceQueryCtrl', GenericDatasourceQueryCtrl = function (_QueryCtrl) {
         _inherits(GenericDatasourceQueryCtrl, _QueryCtrl);
@@ -168,6 +169,11 @@ System.register(['app/plugins/sdk', './css/query-editor.css!', './utils', 'lodas
             }));
           }
         }, {
+          key: 'suggestDownsamplerValues',
+          value: function suggestDownsamplerValues(query, callback) {
+            callback([DEFAULT_DOWNSAMPLER, "average", "sum", "maximum", "minimum", "area"]);
+          }
+        }, {
           key: 'targetBlur',
           value: function targetBlur() {
             //this.errors = this.validateTarget();
@@ -180,6 +186,9 @@ System.register(['app/plugins/sdk', './css/query-editor.css!', './utils', 'lodas
             var dashboardQuery = _.assign({
               m: this.target.metricUrlName
             }, this.buildTagQueryObject());
+            if (this.target.downsampler && this.target.downsampler !== DEFAULT_DOWNSAMPLER) {
+              dashboardQuery.downsampler = this.target.downsampler;
+            }
             return Utils.param(dashboardQuery);
           }
         }, {
