@@ -15,6 +15,9 @@ docs/GITCOMMIT
 docs/changed-files
 docs/changed-files
 
+# rbcommons
+.pdreview
+
 # locally required config files
 public/css/*.min.css
 

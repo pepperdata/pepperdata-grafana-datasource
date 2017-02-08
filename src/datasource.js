@@ -22,7 +22,10 @@ export class GenericDatasource {
       s: templateReplace(options.range.from.format(PEPPERDATA_DATE_FORMAT)),
       e: templateReplace(options.range.to.format(PEPPERDATA_DATE_FORMAT)),
       tzo: options.range.from.utcOffset() /  60,
-      sample: sample
+      sample: sample,
+      // Remove points without enough hosts reporting
+      removeincomplete: 1,
+      omitpoints: "null"
     });
     const promises = _(options.targets).filter(t => !t.hide).map((target) => {
       var qs = Utils.parseQueryString(target.rawDashboardQuery);

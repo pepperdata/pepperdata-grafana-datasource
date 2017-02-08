@@ -66,7 +66,10 @@ System.register(['lodash', './utils', 'moment'], function (_export, _context) {
               s: templateReplace(options.range.from.format(PEPPERDATA_DATE_FORMAT)),
               e: templateReplace(options.range.to.format(PEPPERDATA_DATE_FORMAT)),
               tzo: options.range.from.utcOffset() / 60,
-              sample: sample
+              sample: sample,
+              // Remove points without enough hosts reporting
+              removeincomplete: 1,
+              omitpoints: "null"
             });
             var promises = _(options.targets).filter(function (t) {
               return !t.hide;
