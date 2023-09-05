@@ -1,12 +1,23 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { InlineField, Input, SecretInput } from '@grafana/ui';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { MyDataSourceOptions, MySecureJsonData } from '../types';
 
 interface Props extends DataSourcePluginOptionsEditorProps<MyDataSourceOptions, MySecureJsonData> {}
 
+const DEFAULT_DASHBOARD_URL = 'https://dashboard.pepperdata.com';
+
 export function ConfigEditor(props: Props) {
   const { onOptionsChange, options } = props;
+
+  // Set default dashboardUrl on load
+  useEffect(() => {
+    if (!options.jsonData.dashboardUrl) {
+      onOptionsChange({ ...options, jsonData: { ...options.jsonData, dashboardUrl: DEFAULT_DASHBOARD_URL } });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onUrlChange = (event: ChangeEvent<HTMLInputElement>) => {
     const jsonData = {
       ...options.jsonData,
@@ -62,32 +73,37 @@ export function ConfigEditor(props: Props) {
     });
   };
 
-  // const onResolutionChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const jsonData = {
-  //     ...options.jsonData,
-  //     resolution: parseFloat(event.target.value),
-  //   };
-  //   onOptionsChange({ ...options, jsonData });
-  // };
-
   const { jsonData, secureJsonFields } = options;
   const secureJsonData = (options.secureJsonData || {}) as MySecureJsonData;
+  const apiKeysUrl = `${jsonData.dashboardUrl}/account/apikeys`;
 
   return (
     <div className="gf-form-group">
       <InlineField label="Dashboard URL" labelWidth={20} required>
         <Input
           onChange={onUrlChange}
-          value={jsonData.dashboardUrl || ''}
+          value={jsonData.dashboardUrl}
           placeholder="e.g. https://dashboard.pepperdata.com"
           width={40}
         />
       </InlineField>
-      <InlineField label="API Key ID" labelWidth={20} required>
+      <InlineField
+        label="API Key ID"
+        labelWidth={20}
+        required
+        interactive
+        tooltip={
+          <span>
+            API keys can be generated here:{' '}
+            <a href={apiKeysUrl} rel="noreferrer" target="_blank">
+              {apiKeysUrl}
+            </a>
+          </span>
+        }
+      >
         <SecretInput
           isConfigured={(secureJsonFields && secureJsonFields.apiKeyId) as boolean}
           value={secureJsonData.apiKeyId || ''}
-          placeholder="secure json field (backend only)"
           width={40}
           onReset={onResetAPIKeyId}
           onChange={onAPIKeyIdChange}
@@ -97,20 +113,11 @@ export function ConfigEditor(props: Props) {
         <SecretInput
           isConfigured={(secureJsonFields && secureJsonFields.apiKeyToken) as boolean}
           value={secureJsonData.apiKeyToken || ''}
-          placeholder="secure json field (backend only)"
           width={40}
           onReset={onResetAPIKeyToken}
           onChange={onAPIKeyTokenChange}
         />
       </InlineField>
-      {/* <InlineField label="Resolution" labelWidth={12}>
-        <Input
-          onChange={onResolutionChange}
-          value={jsonData.resolution || ''}
-          placeholder="Enter a number"
-          width={40}
-        />
-      </InlineField> */}
     </div>
   );
 }

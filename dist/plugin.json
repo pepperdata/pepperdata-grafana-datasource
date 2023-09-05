@@ -1,33 +1,38 @@
 {
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
   "name": "Pepperdata",
   "id": "pepperdata-grafana-datasource",
-  "type": "datasource",
-
-  "partials": {
-    "config": "public/app/plugins/datasource/pepperdata/partials/config.html"
-  },
-
   "metrics": true,
-  "annotations": false,
-
   "info": {
-    "description": "pepperdata datasource",
+    "description": "Data source for pepperdata metrics",
     "author": {
-      "name": "Pepperdata",
-      "url": "http://pepperdata.com"
+      "name": "Pepperdata"
     },
+    "keywords": ["datasource"],
     "logos": {
-      "small": "src/img/pepperdata_logo_square.svg",
-      "large": "src/img/pepperdata_logo_square.svg"
+      "small": "img/pepperdata_logo_square.svg",
+      "large": "img/pepperdata_logo_square.svg"
     },
-    "links": [
-    ],
-    "version": "0.1.0",
-    "updated": "2016-11-21"
+    "links": [],
+    "screenshots": [],
+    "version": "1.0.0",
+    "updated": "2023-09-05"
   },
-
   "dependencies": {
-    "grafanaVersion": "3.x.x",
-    "plugins": [ ]
-  }
+    "grafanaDependency": ">=9.5.3",
+    "plugins": []
+  },
+  "routes": [
+    {
+      "path": "api",
+      "url": "{{ .JsonData.dashboardUrl }}",
+      "headers": [
+        {
+          "name": "Authorization",
+          "content": "PDAPI {{ .SecureJsonData.apiKeyId }}:{{ .SecureJsonData.apiKeyToken }}"
+        }
+      ]
+    }
+  ]
 }

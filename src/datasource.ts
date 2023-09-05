@@ -7,11 +7,13 @@ import { getBackendSrv } from '@grafana/runtime';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   url?: string;
+  options: MyDataSourceOptions;
 
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
 
     this.url = instanceSettings.url;
+    this.options = instanceSettings.jsonData;
   }
 
   fetchMetric(realm: string, metricParams: Record<string, any>) {

@@ -16,6 +16,7 @@ import _ from 'lodash';
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
+const LABEL_WIDTH = 24;
 const tagKeyLookup: Record<string, string> = {
   host: 'h',
   user: 'u',
@@ -52,7 +53,7 @@ const tagOptions = _(tagKeyLookup)
   .sortBy('label')
   .value();
 
-export function QueryEditor({ query, onChange, onRunQuery }: Props) {
+export function QueryEditor({ query, onChange, onRunQuery, datasource }: Props) {
   const [tagName, setTagName] = useState<string | null>(null);
   const [tagValue, setTagValue] = useState('');
   const theme = useTheme2();
@@ -110,18 +111,19 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
 
   const { queryText, realm, metric, tags, downsampler, alias } = query;
   const areControlsDisabled = Boolean(queryText);
+  const metricDefinitionsUrl = `${datasource.options.dashboardUrl}/${realm}/metricdefinitions`;
 
   return (
     <div>
-      <InlineField label="Realm" labelWidth={16} required>
+      <InlineField label="Realm" labelWidth={LABEL_WIDTH} required invalid={!realm} error="Realm is required">
         <Input onChange={onRealmChange} value={realm} width={30} />
       </InlineField>
-      <InlineField label="Alias" labelWidth={16}>
+      <InlineField label="Alias" labelWidth={LABEL_WIDTH}>
         <Input onChange={onAliasChange} value={alias} width={30} />
       </InlineField>
       <InlineField
         label="Query Text"
-        labelWidth={16}
+        labelWidth={LABEL_WIDTH}
         tooltip="If you know the metrics API query
         string you can paste it here, e.g. m=tasks&u=bob&downsampler=maximum. Otherwise, use the fields
         below to build your query."
@@ -130,17 +132,27 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
       </InlineField>
       <InlineField
         label="Metric name"
-        labelWidth={16}
+        labelWidth={LABEL_WIDTH}
         disabled={areControlsDisabled}
-        tooltip="Metric urlname. Example: tasks, rssram. Simple operations can be performed on metrics using
-            RPN notation. For example if you wanted to divide the ram per task you would do:
-            expr(rssram tasks /)"
+        interactive
+        tooltip={
+          <>
+            <p>
+              Metric urlname. Example: tasks, rssram. Simple operations can be performed on metrics using RPN notation.
+              For example if you wanted to divide the ram per task you would do: expr(rssram tasks /).
+            </p>
+            <a href={metricDefinitionsUrl} target="_blank" rel="noreferrer">
+              Click here
+            </a>{' '}
+            to see available metric names
+          </>
+        }
       >
         <Input onChange={onMetricChange} value={metric} width={30} placeholder="e.g. rssram" />
       </InlineField>
       <InlineField
         label="Tags"
-        labelWidth={16}
+        labelWidth={LABEL_WIDTH}
         tooltip={`Select a tag and enter a value to filter by, then click Add to apply. If the tag you need is not
           in the list, you can type it manually. Set value to "*" (no quotes) to return all series.`}
       >
@@ -191,7 +203,7 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
           </InlineFieldRow>
         </>
       </InlineField>
-      <InlineField label="Downsampler" labelWidth={16} disabled={areControlsDisabled}>
+      <InlineField label="Downsampler override" labelWidth={LABEL_WIDTH} disabled={areControlsDisabled}>
         <Select
           options={downsamplerOptions}
           onChange={onDownsamplerChange}
