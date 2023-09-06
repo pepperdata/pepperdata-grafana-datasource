@@ -39,8 +39,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const { range } = options;
     const from = range!.from.valueOf();
     const to = range!.to.valueOf();
-    const rangeMs = options.range.to.valueOf() - options.range.from.valueOf();
-    const sample = Math.max(10000, options.maxDataPoints ? Math.round(rangeMs / options.maxDataPoints) : 0);
+    const sample = Math.max(10000, options.intervalMs);
 
     const dataFrames = options.targets
       .filter((target) => !target.hide)
