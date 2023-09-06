@@ -61,8 +61,8 @@ export function QueryEditor({ query, onChange, onRunQuery, datasource }: Props) 
 
   const debouncedOnRunQuery = useMemo(() => _.debounce(onRunQuery, 500), [onRunQuery]);
 
-  const onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange({ ...query, queryText: event.target.value });
+  const onQueryStringChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onChange({ ...query, metricsQueryString: event.target.value });
     debouncedOnRunQuery();
   };
 
@@ -110,8 +110,8 @@ export function QueryEditor({ query, onChange, onRunQuery, datasource }: Props) 
     debouncedOnRunQuery();
   };
 
-  const { queryText, realm, metric, tags, downsampler, alias } = query;
-  const areControlsDisabled = Boolean(queryText);
+  const { metricsQueryString, realm, metric, tags, downsampler, alias } = query;
+  const areControlsDisabled = Boolean(metricsQueryString);
   const metricDefinitionsUrl = `${datasource.options.dashboardUrl}/${realm}/metricdefinitions`;
 
   return (
@@ -121,15 +121,6 @@ export function QueryEditor({ query, onChange, onRunQuery, datasource }: Props) 
       </InlineField>
       <InlineField label="Alias" labelWidth={LABEL_WIDTH}>
         <Input onChange={onAliasChange} value={alias} width={30} />
-      </InlineField>
-      <InlineField
-        label="Query Text"
-        labelWidth={LABEL_WIDTH}
-        tooltip="If you know the metrics API query
-        string you can paste it here, e.g. m=tasks&u=bob&downsampler=maximum. Otherwise, use the fields
-        below to build your query."
-      >
-        <Input onChange={onQueryTextChange} value={queryText || ''} width={60} />
       </InlineField>
       <InlineField
         label="Metric name"
@@ -211,6 +202,16 @@ export function QueryEditor({ query, onChange, onRunQuery, datasource }: Props) 
           value={downsampler ?? DEFAULT_DOWNSAMPLER}
           width={30}
         />
+      </InlineField>
+      <hr />
+      <InlineField
+        label="Metrics Query String"
+        labelWidth={LABEL_WIDTH}
+        tooltip="If you know the metrics API query
+          string you can paste it here, e.g. m=tasks&u=bob&downsampler=maximum. Otherwise, use the fields
+          above to build your query."
+      >
+        <Input onChange={onQueryStringChange} value={metricsQueryString || ''} width={60} />
       </InlineField>
     </div>
   );

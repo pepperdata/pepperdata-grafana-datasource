@@ -44,13 +44,13 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const dataFrames = options.targets
       .filter((target) => !target.hide)
       .map((target) => {
-        const { downsampler, tags, metric, alias, queryText } = target;
-        const paramsFromQueryText = Object.fromEntries(new URLSearchParams(queryText));
+        const { downsampler, tags, metric, alias, metricsQueryString } = target;
+        const paramsFromQueryText = Object.fromEntries(new URLSearchParams(metricsQueryString));
         return this.fetchMetric(target.realm ?? '', {
           sample,
           s: from,
           e: to,
-          ...(queryText
+          ...(metricsQueryString
             ? paramsFromQueryText
             : {
                 m: metric,
