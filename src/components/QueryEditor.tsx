@@ -1,3 +1,4 @@
+// Copyright (C) 2023 Pepperdata Inc. - All rights reserved.
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import {
   Button,

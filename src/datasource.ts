@@ -1,3 +1,4 @@
+// Copyright (C) 2023 Pepperdata Inc. - All rights reserved.
 import { DataQueryRequest, DataSourceApi, DataSourceInstanceSettings, toDataFrame } from '@grafana/data';
 import { map, merge, catchError, of, lastValueFrom } from 'rxjs';
 

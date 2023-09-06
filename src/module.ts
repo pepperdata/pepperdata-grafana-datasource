@@ -1,3 +1,4 @@
+// Copyright (C) 2023 Pepperdata Inc. - All rights reserved.
 import { DataSourcePlugin } from '@grafana/data';
 import { DataSource } from './datasource';
 import { ConfigEditor } from './components/ConfigEditor';

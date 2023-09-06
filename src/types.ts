@@ -1,3 +1,4 @@
+// Copyright (C) 2023 Pepperdata Inc. - All rights reserved.
 import { DataQuery, DataSourceJsonData } from '@grafana/schema';
 
 export interface MyQuery extends DataQuery {

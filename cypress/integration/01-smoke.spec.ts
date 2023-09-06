@@ -1,3 +1,4 @@
+// Copyright (C) 2023 Pepperdata Inc. - All rights reserved.
 import { e2e } from '@grafana/e2e';
 
 e2e.scenario({
