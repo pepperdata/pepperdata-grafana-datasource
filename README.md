@@ -1,15 +1,38 @@
-# Grafana data source plugin template
+# Pepperdata data source plugin
 
-This template is a starting point for building a Data Source Plugin for Grafana.
+Grafana datasource plugin that allows you to query Pepperdata dashboard metrics data for display in Grafana dashboards.
 
-## What are Grafana data source plugins?
+## Prerequisites
 
-Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There’s a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. Grafana Data Source Plugins enables integrating such solutions with Grafana.
+These steps assume you're running MacOS. To run this plugin locally in dev mode, you will need to:
+
+1. Install Grafana
+
+   ```bash
+   brew install grafana
+   ```
+
+2. Link your local plugin repo to the grafana plugins directory.
+
+   ```bash
+   # Create a plugin directory
+   mkdir ~/grafana-plugins
+
+   # Set this directory as the grafana pluginsDir
+   grafana cli --pluginsDir "~/grafana-plugins"
+
+   # Link your local repo to the plugins directory
+   cd ~/grafana-plugins
+   ln -s <path_to_plugin_directory> .
+   ```
+
+3. Edit your grafana.ini to run Grafana in development mode. By default the config file is located at `/usr/local/etc/grafana/grafana.ini`.
+
+   ```bash
+   app_mode = development
+   ```
 
 ## Getting started
-
-
-### Frontend
 
 1. Install dependencies
 
@@ -39,7 +62,13 @@ Grafana supports a wide range of data sources, including Prometheus, MySQL, and 
    npm run test:ci
    ```
 
-5. Spin up a Grafana instance and run the plugin inside it (using Docker)
+5. Start the Grafana service:
+
+   ```bash
+   brew services start grafana
+   ```
+
+   Optionally you can spin up a Grafana docker image that will run the plugin:
 
    ```bash
    npm run server
@@ -64,7 +93,6 @@ Grafana supports a wide range of data sources, including Prometheus, MySQL, and 
 
    npm run lint:fix
    ```
-
 
 # Distributing your plugin
 
@@ -104,7 +132,6 @@ To trigger the workflow we need to push a version tag to github. This can be ach
 
 1. Run `npm version <major|minor|patch>`
 2. Run `git push origin main --follow-tags`
-
 
 ## Learn more
 
