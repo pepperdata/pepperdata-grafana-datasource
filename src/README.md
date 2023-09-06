@@ -27,7 +27,7 @@ Once the datasource is connected, you can start building visualizations using Pe
 
 - Realm: this is required so we know which realm to query metrics.
 - Alias: an optional label applied to this metrics query that will be displayed in the visualization.
-- Query Text: an optional field that lets you build the metrics query manually using query params (see https://help.pepperdata.com/rest-api/zz-metrics/ for more details). If providing a custom query string, the fields below it will be disabled.
 - Metric name: provide the name of the metric you want to query.
 - Tags: if you want to filter this query by certain tags, provide them here.
 - Downsampler override: optionally change the downsampler operator for this query.
+- Metrics query string: an optional field that lets you build the metrics query manually using query params (see https://help.pepperdata.com/rest-api/zz-metrics/ for more details). If providing a custom query string, the other fields will be disabled.

@@ -205,7 +205,7 @@ export function QueryEditor({ query, onChange, onRunQuery, datasource }: Props) 
       </InlineField>
       <hr />
       <InlineField
-        label="Metrics Query String"
+        label="Metrics query string"
         labelWidth={LABEL_WIDTH}
         tooltip="If you know the metrics API query
           string you can paste it here, e.g. m=tasks&u=bob&downsampler=maximum. Otherwise, use the fields
