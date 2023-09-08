@@ -112,7 +112,7 @@ export function QueryEditor({ query, onChange, onRunQuery, datasource }: Props) 
 
   const { metricsQueryString, realm, metric, tags, downsampler, alias } = query;
   const areControlsDisabled = Boolean(metricsQueryString);
-  const metricDefinitionsUrl = `${datasource.options.dashboardUrl}/${realm}/metricdefinitions`;
+  const metricDefinitionsUrl = `https://dashboard.pepperdata.com/${realm}/metricdefinitions`;
 
   return (
     <div>

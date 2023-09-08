@@ -17,11 +17,11 @@ Grafana datasource plugin that provides access to Pepperdata dashboard metrics.
 
 2. Configure the datasource. You will need to provide the dashboard URL for your deployment (https://dashboard.pepperdata.com by default) and enter your API key ID and token into the respective fields. Click Save and test to ensure the connection is working.
 
-   ![Pepperdata datasource query editor screenshot](img/pepperdata_datasource_config.png)
+   ![Pepperdata datasource query editor screenshot](https://github.com/pepperdata/pepperdata-grafana-datasource/blob/master/src/img/pepperdata_datasource_config.png)
 
 ## Building metrics queries
 
-![Pepperdata datasource query editor screenshot](img/pepperdata_datasource_query.png)
+![Pepperdata datasource query editor screenshot](https://github.com/pepperdata/pepperdata-grafana-datasource/blob/master/src/img/pepperdata_datasource_query.png)
 
 Once the datasource is connected, you can start building visualizations using Pepperdata dashboard metrics by using the query editor.
 

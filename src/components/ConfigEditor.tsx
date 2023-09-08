@@ -1,31 +1,13 @@
 // Copyright (C) 2023 Pepperdata Inc. - All rights reserved.
-import React, { ChangeEvent, useEffect } from 'react';
-import { InlineField, Input, SecretInput } from '@grafana/ui';
+import React, { ChangeEvent } from 'react';
+import { InlineField, SecretInput } from '@grafana/ui';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { MyDataSourceOptions, MySecureJsonData } from '../types';
 
 interface Props extends DataSourcePluginOptionsEditorProps<MyDataSourceOptions, MySecureJsonData> {}
 
-const DEFAULT_DASHBOARD_URL = 'https://dashboard.pepperdata.com';
-
 export function ConfigEditor(props: Props) {
   const { onOptionsChange, options } = props;
-
-  // Set default dashboardUrl on load
-  useEffect(() => {
-    if (!options.jsonData.dashboardUrl) {
-      onOptionsChange({ ...options, jsonData: { ...options.jsonData, dashboardUrl: DEFAULT_DASHBOARD_URL } });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const onUrlChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const jsonData = {
-      ...options.jsonData,
-      dashboardUrl: event.target.value,
-    };
-    onOptionsChange({ ...options, jsonData });
-  };
 
   // Secure field (only sent to the backend)
   const onAPIKeyIdChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -74,20 +56,12 @@ export function ConfigEditor(props: Props) {
     });
   };
 
-  const { jsonData, secureJsonFields } = options;
+  const { secureJsonFields } = options;
   const secureJsonData = (options.secureJsonData || {}) as MySecureJsonData;
-  const apiKeysUrl = `${jsonData.dashboardUrl}/account/apikeys`;
+  const apiKeysUrl = `https://dashboard.pepperdata.com/account/apikeys`;
 
   return (
     <div className="gf-form-group">
-      <InlineField label="Dashboard URL" labelWidth={20} required>
-        <Input
-          onChange={onUrlChange}
-          value={jsonData.dashboardUrl}
-          placeholder="e.g. https://dashboard.pepperdata.com"
-          width={40}
-        />
-      </InlineField>
       <InlineField
         label="API Key ID"
         labelWidth={20}
